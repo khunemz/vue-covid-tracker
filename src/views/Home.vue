@@ -1,7 +1,8 @@
 <template>
   <main v-if="!loading">
     <DataTitle :text="Tile" :dataDate="dataDate" />
-    <DataBoxes />
+    <DataBoxes :stats="stats" />
+    <CountrySelect :countries="countries" />
   </main>
 
   <main v-else class="flext flex-col align-center justify-center text-center">
@@ -16,11 +17,14 @@
 // @ is an alias to /src
 import DataTitle from '@/components/DataTitle';
 import DataBoxes from '@/components/DataBoxes';
+import CountrySelect from '@/components/CountrySelect';
+
 export default {
   name: 'Home',
   components: {
     DataTitle,
     DataBoxes ,
+    CountrySelect,
   },
   data() {
     return {
@@ -28,7 +32,7 @@ export default {
       title: 'GLOBAL',
       dataDate: '',
       stats: {},
-      contries: [],
+      countries: [],
       loadingImage: require('../assets/hourglass.gif')
     }
   },
@@ -43,7 +47,7 @@ export default {
     const data = await this.fetchCovidData();
     this.dataDate = data.Date;
     this.stats = data.Global;
-    this.country = data.Contries;
+    this.countries = data.Countries;
     this.loading = false;
   }
 }
