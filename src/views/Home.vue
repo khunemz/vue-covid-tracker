@@ -2,7 +2,10 @@
   <main v-if="!loading">
     <DataTitle :text="Tile" :dataDate="dataDate" />
     <DataBoxes :stats="stats" />
-    <CountrySelect :countries="countries" />
+    <CountrySelect :countries="countries" @get-country="getCountryData" />
+    <button class="bg-green-700 text-white rounded p-3 mt-10 focus:outline-none hover:bg-green-600" v-if="stats.Country" @click="clearCountry">
+      Clear dropdown
+    </button>
   </main>
 
   <main v-else class="flext flex-col align-center justify-center text-center">
@@ -41,6 +44,17 @@ export default {
       const res = await fetch('https://api.covid19api.com/summary');
       const data = await res.json();
       return data;
+    },
+    getCountryData(country) {
+      this.stats = country;
+      this.title = country;
+    },
+    async clearCountry() {
+      this.loading = true;
+      const data = await this.fetchCovidData(); 
+      this.title = 'GLOBAL';
+      this.stats = data.Global;
+      this.loading = false;
     }
   } ,
   async created() {
